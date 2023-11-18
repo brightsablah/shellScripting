@@ -76,9 +76,17 @@ int _setenv(const char *name, const char *value, int overwrite) {
         newEnviron[i] = environ[i];
     }
 
+    // Free the memory of the existing environment variable
+    if (existingValue != NULL) {
+        free(existingValue);
+    }
+
     // Add the new environment variable
     newEnviron[envSize] = newEnvVar;
     newEnviron[envSize + 1] = NULL;
+
+    // Free the memory of the old environment variables
+    free(environ);
 
     // Update the global environ pointer
     environ = newEnviron;

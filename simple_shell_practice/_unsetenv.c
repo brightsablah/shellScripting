@@ -71,11 +71,11 @@ int _setenv(const char *name, const char *value, int overwrite) {
         exit(EXIT_FAILURE);
     }
 
-    // Copy existing environment variables
+    // Copy existing environment variables and free old env
     for (int i = 0; i < envSize; i++) {
         newEnviron[i] = environ[i];
     }
-
+//	free(environ);
     // Add the new environment variable
     newEnviron[envSize] = newEnvVar;
     newEnviron[envSize + 1] = NULL;
@@ -120,6 +120,9 @@ int _unsetenv(const char *name) {
             }
             *env = NULL;
 
+            // Now, free the memory for the environ array
+            
+
             return 0;
         }
     }
@@ -132,9 +135,11 @@ int main(void) {
     _setenv("MY_VARIABLE", "some_value", 1);
 
     // Access the value of the environment variable
-    char *value = getenv("MY_VARIABLE");
+    char *value = _getenv("MY_VARIABLE");
     if (value != NULL) {
         printf("Value of MY_VARIABLE: %s\n", value);
+
+//		free(value);
     } else {
         printf("MY_VARIABLE not found in the environment.\n");
     }
@@ -149,6 +154,10 @@ int main(void) {
     } else {
         printf("MY_VARIABLE not found in the environment after unset.\n");
     }
+
+//	free(*environ);
+	free(environ);
+
 
     return 0;
 }
